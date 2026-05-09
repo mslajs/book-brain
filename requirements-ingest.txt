@@ -1,0 +1,6 @@
+pypdf>=4.0
+langchain-text-splitters>=1.0
+tiktoken
+openai>=1.0
+pinecone
+python-dotenv
