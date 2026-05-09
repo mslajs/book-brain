@@ -43,7 +43,7 @@ def _query_namespace(index, embedding: list[float], namespace: str, top_k: int) 
     return passages
 
 
-def retrieve_passages(question: str, namespaces: list[str], top_k: int = 5) -> list[dict]:
+def retrieve_passages(question: str, namespaces: list[str], top_k: int = 8) -> list[dict]:
     """
     Queries each namespace in parallel and returns all retrieved passages.
     Each passage is a dict with: title, author, namespace, text, score.

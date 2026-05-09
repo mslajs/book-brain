@@ -13,10 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 def _format_book_list() -> str:
-    return "\n".join(
-        f"{b['namespace']} | {b['title']} | {b['author']} | {b['topics']}"
-        for b in BOOKS
-    )
+    lines = []
+    for b in BOOKS:
+        lines.append(
+            f"{b['namespace']} | {b['title']} | {b['author']}\n"
+            f"  topics: {b['topics']}\n"
+            f"  concepts: {b.get('concepts', '')}"
+        )
+    return "\n\n".join(lines)
 
 
 def _format_history(chat_history: list[dict]) -> str:
@@ -47,10 +51,12 @@ The library contains these books:
 Your job: return a JSON array of namespace strings for every book that contains knowledge meaningfully relevant to the user's question.
 
 Rules:
-- Pay close attention to the topics field for each book — if the question touches on any of those topics, include the book.
+- Check both the topics and concepts fields for each book.
+- If the question names or implies a specific framework, model, or tool listed in a book's concepts field, that book is almost certainly relevant — include it.
+- Pay close attention to topics: if the question touches on any listed topic, include the book.
 - Be inclusive: if a book has even a moderately useful perspective, include it.
-- Match on concepts, not just keywords. A question about "people problems", "team issues", or "accountability" should match a book whose topics include "team dynamics", "trust", or "accountability" — even if those exact words aren't in the question.
-- Only exclude books whose topics are clearly unrelated to the question.
+- Match on meaning, not just keywords. A question about "people problems" or "team issues" should match topics like "team dynamics" and "trust"; a question about "setting goals" should match concepts like "OKRs" or "MBO".
+- Only exclude books whose topics and concepts are clearly unrelated to the question.
 
 Return ONLY a valid JSON array of namespace strings. No explanation. No markdown. Example:
 ["radical-candor", "high-output-management", "the-managers-path"]"""
